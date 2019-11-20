@@ -20,7 +20,7 @@ app.post("/accounts", function(req, res) {
   console.log(req.headers.username);
   const username = req.headers.username;
   const email = req.headers.email;
-  const hash = bcrypt.hashSync(req.headers.password, saltRounds);
+  const hash = bcrypt.hashSync(req.headers.password, 10);
   const type = req.headers.type;
   const created_at = new Date().toISOString();
 
@@ -38,16 +38,15 @@ app.post("/accounts", function(req, res) {
     "')";
   connection.query(stmt, function(error, results, fields) {
     if (error) {
-      res.send(error);
+      res.status(401).json({
+        message : "Username already existed!"
+      });
       return;
     }
     if (results[0] == undefined) {
-      res.json({
+      res.status(200).json({
         message: "Successfully registered!"
       });
-    } else {
-      res.send(results[0]);
-      console.log(results[0]);
     }
   });
 });
@@ -65,21 +64,27 @@ app.get("/accounts", function(req, res) {
     "'";
   connection.query(stmt, function(error, results, fields) {
     if (error) {
-      res.send(error);
+      res.status(401).send(error);
       return;
     }
     if (results[0] == undefined) {
-      res.json({
-        message: "Invalid username!"
+      res.status(401).json({
+        message: "Validation failed. Given username and password aren't matching."
       });
     } else {
       if (bcrypt.compareSync(password, results[0].password)) {
-        res.json({
-          message: "You're logged in!"
+        var token = jwt.sign({
+          exist
+        }, config.secret, {
+          expiresIn: 86400 // expires in 24 hours
+        })
+        res.status(200).json({
+          success: true,
+          token : token
         });
       } else {
-        res.json({
-          message: "Incorrect password!"
+        res.status(401).json({
+          message: "Validation failed. Given username and password aren't matching."
         });
       }
     }
@@ -109,28 +114,28 @@ app.put("/accounts", function(req, res) {
     "'";
   connection.query(stmt1, function(error, results, fields) {
     if (error) {
-      res.send(error);
+      res.status(401).send(error);
       return;
     }
     if (results[0] == undefined) {
-      res.json({
+      res.status(401).json({
         message: "Invalid username!"
       });
     } else {
       if (bcrypt.compareSync(password, results[0].password)) {
         connection.query(stmt2, function(error, results, fields) {
           if (error) {
-            res.send(error);
+            res.status(401).send(error);
             return;
           }
           if (results[0] == undefined) {
-            res.json({
+            res.status(200).json({
               message: "Successfully updated!"
             });
           }
         });
       } else {
-        res.json({
+        res.status(401).json({
           message: "Incorrect password!"
         });
       }
@@ -150,16 +155,14 @@ app.delete("/accounts", function(req, res) {
     "'";
     connection.query(stmt, function(error, results, fields) {
         if (error) {
-          res.send(error);
+          res.status(401).send(error);
           return;
         }
         if (results[0] == undefined) {
-          res.json({
-            message: "Invalid username!"
+          res.status(401).json({
+            message: "Successfully deleted!"
           });
-        } else {
-          res.send(results[0])
-        }
+        } 
       });
 });
 
