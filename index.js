@@ -73,7 +73,7 @@ app.get("/accounts", function(req, res) {
         message: "Validation failed. Given username and password aren't matching."
       });
     } else {
-      if (bcrypt.compareSync(password, results[0].password)) {
+      if (bcrypt.compareSync(password, results.password)) {
         var token = jwt.sign({
           exist
         }, config.secret, {
