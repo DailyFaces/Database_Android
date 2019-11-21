@@ -17,6 +17,35 @@ const connection = mysql.createPool({
   database: "database_android"
 });
 
+app.get('/auth/user', function (req, res, next) {
+  let token = req.headers.token
+  console.log(req.headers.token)
+  if (token.startsWith('Bearer ')) {
+    // Remove Bearer from string
+    token = token.slice(7, token.length);
+  }
+  if (token) {
+    jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Token is not valid'
+        });
+      } else {
+        req.decoded = decoded;
+        next();
+        res.status(200).send(decoded);
+      }
+    });
+  } else {
+    return res.json({
+      success: false,
+      message: 'Auth token is not supplied'
+    });
+  }
+})
+
+
 app.post("/accounts", function(req, res) {
   console.log(req.headers.username);
   const username = req.headers.username;
