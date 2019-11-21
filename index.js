@@ -34,7 +34,10 @@ app.get('/auth/user', function (req, res, next) {
       } else {
         req.decoded = decoded;
         next();
-        res.status(200).send(decoded);
+        res.status(200).json({
+          message : "Auth token is valid",
+          decoded : decoded
+        });
       }
     });
   } else {
