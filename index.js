@@ -1,14 +1,15 @@
-var mysql = require("mysql");
-var app = require("express")();
-var express = require("express");
+const mysql = require("mysql");
+const app = require("express")();
+const express = require("express");
 const jwt = require("jsonwebtoken");
-var session = require("express-session");
-var bcrypt = require("bcryptjs");
-var http = require("http").createServer(app);
-var port = process.env.PORT || 3000;
+const session = require("express-session");
+const bcrypt = require("bcryptjs");
+const config = require('./config');
+const http = require("http").createServer(app);
+const port = process.env.PORT || 3000;
 const SECRET_KEY = "secretkey23456";
 
-var connection = mysql.createPool({
+const connection = mysql.createPool({
   connectionLimit: 10,
   host: "localhost",
   user: "root",
