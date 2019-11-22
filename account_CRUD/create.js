@@ -1,9 +1,9 @@
 //config db connection
-const connection =require('../system/db_connection')
+const connection = require('../system/db_connection')
 const bcrypt = require("bcryptjs");
 
-let create_account = (req,res) => {
-	const username = req.headers.username;
+let create_account = (req, res) => {
+  const username = req.headers.username;
   const email = req.headers.email;
   const hash = bcrypt.hashSync(req.headers.password, 10);
   const type = req.headers.type;
@@ -21,19 +21,20 @@ let create_account = (req,res) => {
     "','" +
     created_at +
     "')";
-  connection.query(stmt, function(error, results, fields) {
+  connection.query(stmt, function (error, results, fields) {
     if (error) {
       res.status(401).json({
-        message : "Username already existed!"
+        message: "Username already existed!"
       });
       return;
     }
     if (results[0] == undefined) {
       res.status(200).json({
+        data:fields,
         message: "Successfully registered!"
       });
     }
   });
 }
 
-module.exports = {create_account}
+module.exports = { create_account }

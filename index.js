@@ -9,6 +9,10 @@ const account_auth_user = require('./account_CRUD/auth_user')
 const account_update = require('./account_CRUD/update')
 const account_delete = require('./account_CRUD/delete')
 
+//importing ms_group_CRUD
+const ms_group_create = require('./ms_group_CRUD/create');
+
+
 console.log("connecting..,");
 
 app.get('/auth/user', function (req, res, next) {
@@ -30,6 +34,12 @@ app.put("/accounts/update", function (req, res) {
 app.delete("/accounts/delete", function (req, res) {
   account_delete.account_delete(req, res);
 });
+
+
+//ms_groups
+app.post('/ms-groups/', (req, res) => {
+  ms_group_create.create_ms_group(req,res);
+})
 
 http.listen(PORT, function () {
   console.log("listening on *: " + PORT);
