@@ -8,4 +8,5 @@ const connection = mysql.createPool({
   database: "daily_faces"
 });
 
-module.exports =  connection
+
+module.exports = connection
