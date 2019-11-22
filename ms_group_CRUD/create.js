@@ -2,7 +2,7 @@
 const connection = require('../system/db_connection')
 
 let create_ms_group = (req, res) => {
-  const account_Id = req.params.account_Id;
+  const account_Id = req.params.id;
   const title = req.body.title;
   const created_at = new Date().toISOString();
 

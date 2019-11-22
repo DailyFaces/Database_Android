@@ -37,7 +37,11 @@ app.delete("/accounts/delete", function (req, res) {
 
 
 //ms_groups
-app.post('/ms-groups/', (req, res) => {
+app.post('/ms-groups/:id', (req, res) => {
+  var title;
+  req.on('data', (datai)=>{
+     title = JSON.parse(datai)
+  })
   ms_group_create.create_ms_group(req,res);
 })
 
