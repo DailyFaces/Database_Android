@@ -6,7 +6,7 @@ var connection = mysql.createPool({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'database_android'
+    database: 'daily_faces'
 });
 
 migration.init(connection, __dirname + '/migrations');
