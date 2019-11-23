@@ -1,8 +1,8 @@
-const connection =require('../system/db_connection')
+const connection = require('../system/db_connection')
 const bcrypt = require("bcryptjs");
 
 let update = (req, res) => {
-	const username = req.headers.username;
+  const username = req.headers.username;
   const type = req.headers.type;
   const hash = bcrypt.hashSync(req.headers.newpassword, 10);
   const updated_at = new Date().toISOString();
@@ -21,7 +21,7 @@ let update = (req, res) => {
     "' WHERE `username`='" +
     username +
     "'";
-  connection.query(stmt1, function(error, results1, fields) {
+  connection.query(stmt1, function (error, results1, fields) {
     if (error) {
       res.status(401).send(error);
       return;
@@ -32,7 +32,7 @@ let update = (req, res) => {
       });
     } else {
       if (bcrypt.compareSync(req.headers.password, results1[0].password)) {
-        connection.query(stmt2, function(error, results2, fields) {
+        connection.query(stmt2, function (error, results2, fields) {
           if (error) {
             res.status(401).send(error);
             return;
@@ -52,4 +52,4 @@ let update = (req, res) => {
   });
 }
 
-module.exports = {update}
+module.exports = { update }
