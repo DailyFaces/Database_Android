@@ -1,6 +1,19 @@
 const PORT = process.env.PORT || 3000;
+// Create express app
 const app = require("express")();
 const http = require("http").createServer(app);
+const bodyParser = require('body-parser');
+// Parse requests of content-type - application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: true }))
+// Parse requests of content-type - application/json
+app.use(bodyParser.json())
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+    next();
+});
 
 //imPORTing Account CRUD
 const account_create = require('./account_CRUD/create')
@@ -11,7 +24,9 @@ const account_delete = require('./account_CRUD/delete')
 
 //importing ms_group_CRUD
 const ms_group_create = require('./ms_group_CRUD/create');
-
+const ms_group_retrieve = require('./ms_group_CRUD/retrieve')
+const ms_group_update = require('./ms_group_CRUD/update')
+const ms_group_delete = require('./ms_group_CRUD/delete')
 
 console.log("connecting..,");
 
@@ -38,11 +53,25 @@ app.delete("/accounts/delete", function (req, res) {
 
 //ms_groups
 app.post('/ms-groups/:id', (req, res) => {
-  var title;
-  req.on('data', (datai)=>{
-     title = JSON.parse(datai)
-  })
   ms_group_create.create_ms_group(req,res);
+})
+
+app.get('/ms-groups', (req, res) => {  
+  ms_group_retrieve.all_retrieve_ms_group(req,res);
+})
+
+app.get('/ms-groups/active', (req, res) => {  
+    console.log("endte");
+    
+  ms_group_retrieve.retrieve_ms_group(req,res);
+})
+
+app.delete('/ms-groups/:id', (req, res) => {
+  ms_group_delete.delete_ms_group(req,res);
+})
+
+app.put('/ms-groups/:id', (req, res) => {
+  ms_group_update.update_ms_group(req,res);
 })
 
 http.listen(PORT, function () {

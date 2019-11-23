@@ -23,9 +23,9 @@ let create_ms_group = (req, res) => {
       return;
     }
     if (results[0] == undefined) {
+      results.message = "ms_groups_ Successfully registered!"
       res.status(200).json({
-        data:fields,
-        message: "ms_groups_ Successfully registered!"
+        data: results,
       });
     }
   });
