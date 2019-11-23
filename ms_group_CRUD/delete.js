@@ -10,8 +10,8 @@ let delete_ms_group = (req, res) => {
         "' WHERE `id`='" +
         id +
         "'";
-        
-    connection.query(stmt2, function (error, results, fields) {
+
+    connection.query(stmt2, (error, results) => {
         if (error) {
             res.status(401).send(error);
             return;

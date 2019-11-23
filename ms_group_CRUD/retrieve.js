@@ -4,8 +4,9 @@ const connection = require('../system/db_connection')
 let all_retrieve_ms_group = (req, res) => {
 
     let stmt = "SELECT * FROM `ms_groups`"
+    // let stmt = "SELECT * FROM `ms_groups` JOIN accounts a ON a.id = ms_groups.account_id"
 
-    connection.query(stmt, function (error, results, fields) {
+    connection.query(stmt, (error, results) =>  {
         if (error) {
             res.status(401).json({
                 message: error
@@ -20,10 +21,11 @@ let all_retrieve_ms_group = (req, res) => {
         }
     });
 }
+
 //active group chats
 let retrieve_ms_group = (req, res) => {
     let stmt = "SELECT * FROM `ms_groups`"
-    connection.query(stmt, function (error, results, fields) {
+    connection.query(stmt, (error, results) => {
         if (error) {
             res.status(401).json({
                 message: error

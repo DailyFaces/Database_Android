@@ -15,7 +15,7 @@ let create_ms_group = (req, res) => {
     created_at +
     "')";
 
-  connection.query(stmt, function (error, results, fields) {
+  connection.query(stmt, (error, results) =>  {
     if (error) {
       res.status(401).json({
         message: error
