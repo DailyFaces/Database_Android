@@ -17,6 +17,7 @@ const account_delete = require('./account_CRUD/delete')
 //importing Feeds CRUD
 const feeds_create = require('./feed_CRUD/create')
 const feeds_retrieve = require('./feed_CRUD/retrieve')
+const feeds_update = require('./feed_CRUD/update')
 // const feeds_delete = require('./feed_CRUD/delete')
 
 app.get('/auth/user', function (req, res, next) {
@@ -52,7 +53,9 @@ app.get('/feeds/retrieve', function (req, res) {
 // app.delete('feeds/delete',function(req,res){
 //   feeds_delete.feeds_delete(req,res);
 // })
-
+app.put('/feeds/update', function (req, res) {
+  feeds_update.feeds_update(req, res);
+})
 
 http.listen(port, function () {
   console.log("listening on *: " + port);
