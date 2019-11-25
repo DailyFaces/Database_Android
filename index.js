@@ -88,6 +88,13 @@ app.post('/ms-members/delete/:id', (req, res) => {
   ms_member_crud.delete.delete_ms_member(req,res);
 })
 
+//importing ms_messages_CRUD
+const ms_messages_crud = require('./ms_messages_CRUD/ms_messages_crud');
+
+app.post('/ms-messages/create',(req,res) => {
+  ms_messages_crud.create.create_ms_message(req,res);
+})
+
 app.listen(PORT, function () {
   console.log("listening on *: " + PORT);
 });
