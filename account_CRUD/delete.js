@@ -1,3 +1,5 @@
+var connection = require('../system/db_connection');
+
 let account_delete = (req, res) => {
     const username = req.headers.username;
     const type = req.headers.type;

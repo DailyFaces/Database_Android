@@ -1,4 +1,5 @@
 const bcrypt = require("bcryptjs");
+var connection = require('../system/db_connection');
 
 let update = (req, res) => {
     const username = req.headers.username;

@@ -4,8 +4,7 @@ const app = express(); //use express instead of http module
 const port = process.env.PORT || 3000;
 // removed unused imports
 // create connection as global
-global.connection = require('../system/db_connection')
-    //importing Account CRUD
+//importing Account CRUD
 const account_crud = require('./account_CRUD/account_crud'); //main crud controller
 
 app.post('/auth/user', function(req, res, next) {
