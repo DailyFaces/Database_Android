@@ -1,43 +1,65 @@
+const connection =require('../system/db_connection')
+const app = require("express")();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require('../config');
-let Response = require("./helpers/response");
-let response = new Response(); //response object
-var connection = require('../system/db_connection');
+const bodyParser = require('body-parser');
 
-let auth = (req, res) => {
-    const username = req.body.username;
-    const type = req.body.type;
-    let stmt = `SELECT 'password' FROM 'accounts' WHERE 'username'= '${username}' and 'type'= '${type}'`;
-    connection.query(stmt, (error, results, fields) => {
-        if (error) {
-            response.setRespose(null, err, new Date().toISOString())
-            return res.status(401).send(response);
-        }
-        if (!results.length) { //length == 0 since it is an array
-            response.setRespose(null, { message: "Validation failed. Given username and password aren't matching." }, new Date().toISOString());
-            return res.status(404).send(response);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-        } else {
-            if (bcrypt.compareSync(req.body.password, results[0].password)) {
-                var token = jwt.sign({
-                    username: username
-                }, config.secret, {
-                    expiresIn: '12h' // expires in 24 hours
-                })
+var account = {};
 
-                response.setRespose({
-                    success: true,
-                    message: "Validation successful.",
-                    token: token
-                }, null, new Date().toISOString());
-                return res.send(response);
-            } else {
-                response.setRespose(null, { message: "Validation failed. Given username and password aren't matching." }, new Date().toISOString());
-                return res.status(404).send(response);
-            }
-        }
-    });
+let auth =  (req, res) => {
+	const username = req.body.username;
+
+  let stmt =
+    "SELECT `id`, `password` FROM `accounts` WHERE `username`='" +
+    username +
+    "'";
+
+  connection.query(stmt, function(error, results, fields) {
+    if (error) {
+      res.status(401).send(error);
+      return;
+    }
+    if (results[0] == undefined) {
+      res.status(401).json({
+        message: "Validation failed. Given username and password aren't matching."
+      });
+    } else {
+      if (bcrypt.compareSync(req.body.password, results[0].password)) {
+        connection.query("SELECT * FROM `accounts` WHERE `id` = '" +results[1].id+"'", function(error, user, fields) {
+          if (error) {
+            res.status(401).send(error);
+            return
+          }
+          if (user[0] == undefined) {
+            res.status(401).json({
+              message : "No results found."
+            })
+          } else {
+            jwt.sign({
+              user
+            }, config.secret, {
+              expiresIn: 86400 // expires in 24 hours
+            }, (err, token) => {
+              if (err) { console.log(err)}
+              res.status(200).json({
+                success: true,
+                message : "Validation successful.",
+                token : token
+              });
+            })
+          }
+        })
+      } else {
+        res.status(401).json({
+          message: "Validation failed. Given username and password aren't matching."
+        });
+      }
+    }
+  });
 }
 
-module.exports = { auth }
+module.exports = {auth}

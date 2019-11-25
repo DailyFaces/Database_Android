@@ -1,29 +1,46 @@
 //config db connection
+const connection =require('../system/db_connection')
 const bcrypt = require("bcryptjs");
-var connection = require('../system/db_connection');
+const app = require("express")();
+const bodyParser = require('body-parser');
 
-let create_account = (req, res) => {
-    const username = req.headers.username;
-    const email = req.headers.email;
-    const hash = bcrypt.hashSync(req.headers.password, 10);
-    const type = req.headers.type;
-    const created_at = new Date().toISOString();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-    let stmt = `INSERT INTO 'accounts' ('username','email','password', 'type' , 'created_at') VALUES ('${username}','${email}','${hash}','${type}','${created_at}')`
+let create_account = (req,res) => {
+	const username = req.body.username;
+  const hash = bcrypt.hashSync(req.body.password, 10);
+  const type = req.body.type;
+  const created_at = new Date().toISOString();
+  const updated_at = created_at;
 
-    connection.query(stmt, function(error, results, fields) {
-        if (error) {
-            res.status(401).json({
-                message: "Username already existed!"
-            });
-            return;
-        }
-        if (results[0] == undefined) {
-            res.status(200).json({
-                message: "Successfully registered!"
-            });
-        }
-    });
+  let stmt =
+    "INSERT INTO `accounts`(`username`, `email`, `password`, `type`, `created_at`, `updated_at`) VALUES ('" +
+    username +
+    "','" +
+    email +
+    "','" +
+    hash +
+    "','" +
+    "user" +
+    "','" +
+    created_at +
+    "','" +
+    updated_at +
+    "')";
+  connection.query(stmt, function(error, results, fields) {
+    if (error) {
+      res.status(401).json({
+        message : "Username already existed!"
+      });
+      return;
+    }
+    if (results[0] == undefined) {
+      res.status(200).json({
+        message: "Successfully registered!"
+      });
+    }
+  });
 }
 
-module.exports = { create_account }
+module.exports = {create_account}
