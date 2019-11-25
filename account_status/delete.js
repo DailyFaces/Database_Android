@@ -35,7 +35,7 @@ let remove = (req, res) => {
                   res.status(401).json({
                     error : null,
                     data : results[0],
-                    message : "Successfully created."
+                    message : "Successfully deleted."
                   });
                 }
             });

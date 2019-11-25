@@ -29,7 +29,7 @@ let auth =  (req, res) => {
       });
     } else {
       if (bcrypt.compareSync(req.body.password, results[0].password)) {
-        connection.query("SELECT * FROM `accounts` WHERE `id` = '" +results[1].id+"'", function(error, user, fields) {
+        connection.query("SELECT * FROM `accounts` WHERE `id` = '" +results[0].id+"'", function(error, user, fields) {
           if (error) {
             res.status(401).json({
               error : error,
