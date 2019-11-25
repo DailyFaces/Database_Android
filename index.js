@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const config = require('./config');
 const http = require("http").createServer(app);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 1234;
 const SECRET_KEY = "secretkey23456";
 
 //importing Account CRUD
@@ -18,7 +18,9 @@ const account_delete = require('./account_CRUD/delete')
 const feeds_create = require('./feed_CRUD/create')
 const feeds_retrieve = require('./feed_CRUD/retrieve')
 const feeds_update = require('./feed_CRUD/update')
-// const feeds_delete = require('./feed_CRUD/delete')
+const feeds_delete = require('./feed_CRUD/delete')
+//importing reaction CRUD
+const reactions_create = require('./reaction_CRUD/create')
 
 app.get('/auth/user', function (req, res, next) {
   account_auth_user.auth_user(req, res);
@@ -49,14 +51,14 @@ app.post('/feeds/create', function (req, res) {
 app.get('/feeds/retrieve', function (req, res) {
   feeds_retrieve.feeds_retrieve(req, res);
 })
+app.put('/feeds/delete',function(req,res){
+  feeds_delete.feeds_delete(req,res);
+})
 
-// app.delete('feeds/delete',function(req,res){
-//   feeds_delete.feeds_delete(req,res);
-// })
 app.put('/feeds/update', function (req, res) {
   feeds_update.feeds_update(req, res);
 })
-
+//REACTION
 http.listen(port, function () {
   console.log("listening on *: " + port);
 });
