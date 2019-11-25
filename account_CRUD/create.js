@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 let create_account = (req,res) => {
 	const username = req.body.username;
   const hash = bcrypt.hashSync(req.body.password, 10);
+  const email = req.body.email;
   const created_at = new Date().toISOString();
   const updated_at = created_at;
 
@@ -27,6 +28,7 @@ let create_account = (req,res) => {
     "','" +
     updated_at +
     "')";
+
   connection.query(stmt, function(error, results, fields) {
     if (error) {
       res.status(401).json({
@@ -37,7 +39,7 @@ let create_account = (req,res) => {
       return;
     }
     if (results[0] == undefined) {
-      connection.query(stmt, function(error, results, fields) {
+      connection.query("SELECT * FROM `accounts` WHERE `username`='" +username +"'", function(error, results, fields) {
         if (error) {
           res.status(401).json({
             error : error,
