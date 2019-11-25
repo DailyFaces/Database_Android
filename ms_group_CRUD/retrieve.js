@@ -1,23 +1,23 @@
 //config db connection
-const connection = require('../system/db_connection')
+var connection = require('../system/db_connection');
+let Response = require("../account_CRUD/helpers/response");
+let response = new Response(); //response object
+
+
 //all created group chat
 let all_retrieve_ms_group = (req, res) => {
 
     let stmt = "SELECT * FROM `ms_groups`"
-    // let stmt = "SELECT * FROM `ms_groups` JOIN accounts a ON a.id = ms_groups.account_id"
+    // let stmt = "SELECT * FROM `ms_groups` JOIN accounts AS a ON a.id = ms_groups.account_id"
 
-    connection.query(stmt, (error, results) =>  {
+    connection.query(stmt, (error, results) => {
         if (error) {
-            res.status(401).json({
-                message: error
-            });
-            return;
+            response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+            return res.status(401).json(response);
         }
         if (results.length != 0) {
-            res.status(200).json({
-                message: "All_ms_groups_ Successfully Retrieved!",
-                data: results
-            });
+            response.setRespose({ message: "All_ms_groups_ Successfully Retrieved!", data: results }, null, new Date().toISOString());
+            return res.status(200).json(response);
         }
     });
 }
@@ -27,10 +27,8 @@ let retrieve_ms_group = (req, res) => {
     let stmt = "SELECT * FROM `ms_groups`"
     connection.query(stmt, (error, results) => {
         if (error) {
-            res.status(401).json({
-                message: error
-            });
-            return;
+            response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+            return res.status(401).json(response);
         }
         let filtered_results = []
         results.forEach(data => {
@@ -40,10 +38,8 @@ let retrieve_ms_group = (req, res) => {
         });
 
         if (filtered_results.length != 0) {
-            res.status(200).json({
-                message: "Active ms_groups Successfully Retrieved!",
-                data: filtered_results
-            });
+            response.setRespose({ message: "Active ms_groups Successfully Retrieved!", data: filtered_results }, null, new Date().toISOString());
+            return res.status(200).json(response);
         }
     });
 }

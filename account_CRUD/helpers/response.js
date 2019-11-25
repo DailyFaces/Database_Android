@@ -6,8 +6,13 @@ class Response {
     }
 
     setRespose(data, error, timestamp) {
-        this.data.push(data);
-        this.error.push(error);
+        if (!error) {
+            this.data.push(data);
+            this.error = null;
+        } else {
+            this.error.push(error);
+            this.data = null
+        }
         this.timestamp = timestamp;
     }
 }

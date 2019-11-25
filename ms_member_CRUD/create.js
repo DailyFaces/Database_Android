@@ -1,5 +1,7 @@
 //config db connection
-const connection = require('../system/db_connection')
+var connection = require('../system/db_connection');
+let Response = require("../account_CRUD/helpers/response");
+let response = new Response(); //response object
 
 let create_ms_member = (req, res) => {
     const ms_group_id = req.params.id;
@@ -20,16 +22,12 @@ let create_ms_member = (req, res) => {
 
     connection.query(stmt, (error, results) => {
         if (error) {
-            res.status(401).json({
-                message: error
-            });
-            return;
+            response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+            return res.status(401).json(response);
         }
         if (results[0] == undefined) {
-            results.message = "ms_member Successfully registered!"
-            res.status(200).json({
-                data: results,
-            });
+            response.setRespose(null, { message: "ms_member Successfully registered!" }, new Date().toISOString());
+            res.status(200).json(response);
         }
     });
 }

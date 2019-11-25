@@ -1,4 +1,7 @@
-const connection = require('../system/db_connection')
+//config db connection
+var connection = require('../system/db_connection');
+let Response = require("../account_CRUD/helpers/response");
+let response = new Response(); //response object
 
 let delete_ms_group = (req, res) => {
     const id = req.params.id;
@@ -13,14 +16,13 @@ let delete_ms_group = (req, res) => {
 
     connection.query(stmt2, (error, results) => {
         if (error) {
-            res.status(401).send(error);
-            return;
+            response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+            return res.status(401).send(response);
+
         }
         if (results[0] == undefined) {
-            results.message = "Successfully deleted!"
-            res.status(200).json({
-                data: results
-            });
+            response.setRespose({ message: "Successfully deleted!" }, null, new Date().toISOString());
+            return res.status(200).send(response);
         }
     });
 }

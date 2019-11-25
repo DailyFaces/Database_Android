@@ -11,7 +11,7 @@ let auth = (req, res) => {
     let stmt = `SELECT 'password' FROM 'accounts' WHERE 'username'= '${username}' and 'type'= '${type}'`;
     connection.query(stmt, (error, results, fields) => {
         if (error) {
-            response.setRespose(null, err, new Date().toISOString())
+            response.setRespose(null, error, new Date().toISOString())
             return res.status(401).send(response);
         }
         if (!results.length) { //length == 0 since it is an array

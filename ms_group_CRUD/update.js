@@ -1,5 +1,7 @@
 //config db connection
-const connection = require('../system/db_connection')
+var connection = require('../system/db_connection');
+let Response = require("../account_CRUD/helpers/response");
+let response = new Response(); //response object
 
 let update_ms_group = (req, res) => {
   const id = req.params.id;
@@ -7,26 +9,21 @@ let update_ms_group = (req, res) => {
   const updated_at = new Date().toISOString();
 
   let stmt =
-  "UPDATE `ms_groups` SET `title`='" +
-  title +
-  "',`updated_at`='" +
-  updated_at +
-  "' WHERE `id`='" +
-  id + "'";
+    "UPDATE `ms_groups` SET `title`='" +
+    title +
+    "',`updated_at`='" +
+    updated_at +
+    "' WHERE `id`='" +
+    id + "'";
 
-
-  connection.query(stmt, (error, results) =>  {
+  connection.query(stmt, (error, results) => {
     if (error) {
-      res.status(401).json({
-        message: error
-      });
-      return;
+      response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+      return res.status(401).send(response);
     }
     if (results[0] == undefined) {
-      results.message = "ms_groups_ Successfully Updated!"
-      res.status(200).json({
-        data: results,
-      });
+      response.setRespose({ message: "ms_groups_ Successfully Updated!", err: error }, null, new Date().toISOString());
+      return res.status(200).json(response);
     }
   });
 }
