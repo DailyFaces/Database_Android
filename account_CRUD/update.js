@@ -40,8 +40,18 @@ let update = (req, res) => {
             return;
           }
           if (results2[0] == undefined) {
-            res.status(200).json({
-              message: "Successfully updated!"
+            connection.query("SELECT * FROM `accounts` WHERE `username`='" +username +"'", function(error, results, fields) {
+              if (error) {
+                res.status(401).send(error);
+                return;
+              }
+              if (results[0] == undefined) {
+                res.status(401).json({
+                  success: false        
+                });
+              } else {
+                res.status(200).send(results[0])
+              }
             });
           }
         });

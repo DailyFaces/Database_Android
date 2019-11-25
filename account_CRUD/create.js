@@ -36,8 +36,18 @@ let create_account = (req,res) => {
       return;
     }
     if (results[0] == undefined) {
-      res.status(200).json({
-        message: "Successfully registered!"
+      connection.query(stmt, function(error, results, fields) {
+        if (error) {
+          res.status(401).send(error);
+          return;
+        }
+        if (results[0] == undefined) {
+          res.status(401).json({
+            message: "Registration is not successfull."
+          });
+        } else {
+          res.send(results[0])
+        }
       });
     }
   });

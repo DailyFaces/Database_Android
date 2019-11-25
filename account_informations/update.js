@@ -57,7 +57,19 @@ let update = (req, res) => {
                         success: false
                     });
                 } else {
-                    res.status(200).send(results2[0])
+                    connection.query("SELECT * FROM `accounts_informations` WHERE `account_id`='" + account_id + "'", function (error, results, fields) {
+                        if (error) {
+                            res.status(401).send(error);
+                            return;
+                        }
+                        if (results[0] == undefined) {
+                            res.status(401).json({
+                                success: false
+                            });
+                        } else {
+                            res.status(200).send(results[0])
+                        }
+                    });
                 }
             });
         } else {
@@ -68,4 +80,4 @@ let update = (req, res) => {
     });
 }
 
-module.exports = {update}
+module.exports = { update }
