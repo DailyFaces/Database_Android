@@ -1,7 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require('../config');
-let Response = require("./helpers/response");
+let Response = require("../helpers/response");
 let response = new Response(); //response object
 var connection = require('../system/db_connection');
 
