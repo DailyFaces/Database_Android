@@ -1,12 +1,9 @@
 const connection =require('../system/db_connection')
 
 let retrieve = (req, res) => {
-	const account_id = req.headers.account_id;
+	const account_id = req.params.account_id;
 
-  let stmt =
-    "SELECT * FROM `accounts_informations` WHERE `account_id`='" +
-    account_id +
-    "'";
+  let stmt = "SELECT * FROM `accounts_informations` WHERE `account_id`='" + account_id + "'";
 
   connection.query(stmt, function(error, results, fields) {
     if (error) {

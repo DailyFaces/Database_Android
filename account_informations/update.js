@@ -16,30 +16,9 @@ let update = (req, res) => {
     const contact_number = parseInt(req.body.contact_number, 10);
     const updated_at = new Date().toISOString();
 
-    let stmt1 =
-        "UPDATE `accounts_informations` SET `first_name`='" +
-        first_name +
-        "',`middle_name`='" +
-        middle_name +
-        "',`last_name`='" +
-        last_name +
-        "',`age`='" +
-        age +
-        "',`birth_date`='" +
-        birth_date +
-        "',`gender`='" +
-        gender +
-        "',`contact_number`='" +
-        contact_number +
-        "',`updated_at`='" +
-        updated_at +
-        "' WHERE `account_id`='" +
-        account_id +
-        "'";
-
-    let stmt2 = "SELECT * FROM `accounts_informations` WHERE `account_id`='" +
-        account_id +
-        "'";
+    let stmt1 = "UPDATE `accounts_informations` SET `first_name`='" + first_name +
+        "',`middle_name`='" + middle_name + "',`last_name`='" + last_name + "',`age`='" + age + "',`birth_date`='" + birth_date + "',`gender`='" + gender +
+        "',`contact_number`='" + contact_number + "',`updated_at`='" + updated_at + "' WHERE `account_id`='" + account_id + "'";
 
     connection.query(stmt1, function (error, results1, fields) {
         if (error) {

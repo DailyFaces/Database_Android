@@ -11,18 +11,8 @@ let update = (req, res) => {
   const hash = bcrypt.hashSync(req.body.newpassword, 10);
   const updated_at = new Date().toISOString();
 
-  let stmt1 =
-    "SELECT `password` FROM `accounts` WHERE `username`='" +
-    username +
-    "'";
-  let stmt2 =
-    "UPDATE `accounts` SET `password`='" +
-    hash +
-    "',`updated_at`='" +
-    updated_at +
-    "' WHERE `username`='" +
-    username +
-    "'";
+  let stmt1 = "SELECT `password` FROM `accounts` WHERE `username`='" + username + "'";
+  let stmt2 = "UPDATE `accounts` SET `password`='" + hash + "',`updated_at`='" + updated_at + "' WHERE `username`='" + username + "'";
   connection.query(stmt1, function(error, results1, fields) {
     if (error) {
       res.status(401).json({

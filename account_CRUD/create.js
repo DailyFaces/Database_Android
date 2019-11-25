@@ -15,19 +15,7 @@ let create_account = (req,res) => {
   const updated_at = created_at;
 
   let stmt =
-    "INSERT INTO `accounts`(`username`, `email`, `password`, `type`, `created_at`, `updated_at`) VALUES ('" +
-    username +
-    "','" +
-    email +
-    "','" +
-    hash +
-    "','" +
-    "user" +
-    "','" +
-    created_at +
-    "','" +
-    updated_at +
-    "')";
+    "INSERT INTO `accounts`(`username`, `email`, `password`, `type`, `created_at`, `updated_at`) VALUES ('" + username + "','" + email + "','" + hash + "','" + "user" + "','" + created_at + "','" + updated_at + "')";
 
   connection.query(stmt, function(error, results, fields) {
     if (error) {

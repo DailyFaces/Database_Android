@@ -14,9 +14,7 @@ let auth =  (req, res) => {
 	const username = req.body.username;
 
   let stmt =
-    "SELECT `id`, `password` FROM `accounts` WHERE `username`='" +
-    username +
-    "'";
+    "SELECT `id`, `password` FROM `accounts` WHERE `username`='" + username + "'";
 
   connection.query(stmt, function(error, results, fields) {
     if (error) {

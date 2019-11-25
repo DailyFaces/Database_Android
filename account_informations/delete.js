@@ -6,13 +6,7 @@ let remove = (req, res) => {
     const updated_at = deleted_at;
 
     let stmt =
-        "UPDATE `accounts_informations` SET `deleted_at`='" +
-        deleted_at +
-        "', `updated_at`='" +
-        updated_at +
-        "' WHERE `account_id`='" +
-        account_id +
-        "'";
+        "UPDATE `accounts_informations` SET `deleted_at`='" + deleted_at + "', `updated_at`='" + updated_at + "' WHERE `account_id`='" + account_id + "'";
     connection.query(stmt, function (error, results, fields) {
         if (error) {
           res.status(401).json({

@@ -69,7 +69,7 @@ app.post('/informations/create', (req, res) => {
   console.log(req.body);
   information_create.create(req, res);
 })
-app.post('/informations/:account_id', (req, res) => {
+app.post('/informations/retrieve/:account_id', (req, res) => {
   console.log(req.body);
   information_retrieve.retrieve(req, res);
 })

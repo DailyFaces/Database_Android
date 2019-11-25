@@ -6,12 +6,7 @@ let account_delete = (req, res) => {
   const deleted_at = new Date().toISOString();
   const updated_at = deleted_at;
 
-  let stmt2 =
-    "UPDATE `accounts` SET `deleted_at`='" +
-    deleted_at + "' and `updated_at` = '" + updated_at +
-    "' WHERE `username`='" +
-    username +
-    "'";
+  let stmt2 = "UPDATE `accounts` SET `deleted_at`='" + deleted_at + "' and `updated_at` = '" + updated_at + "' WHERE `username`='" + username + "'";
   connection.query(stmt2, function (error, results2, fields) {
     if (error) {
       res.status(401).json({
