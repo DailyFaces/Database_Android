@@ -25,39 +25,57 @@ let update = (req, res) => {
     "'";
   connection.query(stmt1, function(error, results1, fields) {
     if (error) {
-      res.status(401).send(error);
+      res.status(401).json({
+        error : error,
+        data : null
+      });
       return;
     }
     if (results1[0] == undefined) {
       res.status(401).json({
-        message: "Invalid username!"
+        error : error,
+        data : null,
+        message: "Username not found."
       });
     } else {
       if (bcrypt.compareSync(req.body.password, results1[0].password)) {
         connection.query(stmt2, function(error, results2, fields) {
           if (error) {
-            res.status(401).send(error);
+            res.status(401).json({
+              error : error,
+              data : null
+            });
             return;
           }
           if (results2[0] == undefined) {
             connection.query("SELECT * FROM `accounts` WHERE `username`='" +username +"'", function(error, results, fields) {
               if (error) {
-                res.status(401).send(error);
+                res.status(401).json({
+                  error : error,
+                  data : null
+                });
                 return;
               }
               if (results[0] == undefined) {
                 res.status(401).json({
-                  success: false        
+                  error : error,
+                  data : null
                 });
               } else {
-                res.status(200).send(results[0])
+                res.status(401).json({
+                  error : null,
+                  data : results[0],
+                  message: "Successfully updated."
+                });
               }
             });
           }
         });
       } else {
         res.status(401).json({
-          message: "Incorrect password!"
+          error : error,
+          data : null,
+          message: "Password doesn't match."
         });
       }
     }

@@ -12,6 +12,7 @@ let auth_user = (req, res) => {
         //If token is successfully verified, we can send the autorized data 
         res.json({
             message: 'Successful log in',
+            error : null,
             authorizedData
         });
         console.log('SUCCESS: Connected to protected route');

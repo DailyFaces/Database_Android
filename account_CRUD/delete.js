@@ -14,21 +14,33 @@ let account_delete = (req, res) => {
     "'";
   connection.query(stmt2, function (error, results2, fields) {
     if (error) {
-      res.status(401).send(error);
+      res.status(401).json({
+        error : error,
+        data : null
+      });
       return;
     }
     if (results2[0] == undefined) {
       connection.query("SELECT * FROM `accounts` WHERE `username`='" +username +"'", function(error, results, fields) {
         if (error) {
-          res.status(401).send(error);
+          res.status(401).json({
+            error : error,
+            data : null
+          });
           return;
         }
         if (results[0] == undefined) {
           res.status(401).json({
-            success: false        
+            error : error,
+            data : null,
+            message: "No result found."
           });
         } else {
-          res.status(200).send(results[0])
+          res.status(401).json({
+            error : null,
+            data : results[0],
+            message: "Successfully deleted."
+          });
         }
       });
     }

@@ -69,15 +69,15 @@ app.post('/informations/create', (req, res) => {
   console.log(req.body);
   information_create.create(req, res);
 })
-app.get('/informations/:account_id', (req, res) => {
+app.post('/informations/:account_id', (req, res) => {
   console.log(req.body);
   information_retrieve.retrieve(req, res);
 })
-app.put('/informations/update', (req, res) => {
+app.post('/informations/update', (req, res) => {
   console.log(req.body);
   information_update.update(req, res);
 })
-app.put('/informations/delete/:account_id', (req, res) => {
+app.post('/informations/delete/:account_id', (req, res) => {
   console.log(req.body);
   information_delete.remove(req, res);
 })
@@ -87,15 +87,15 @@ app.post('/status/create', (req, res) => {
   console.log(req.body);
   status_create.create(req, res);
 })
-app.get('/status/:account_id', (req, res) => {
+app.post('/status/:account_id', (req, res) => {
   console.log(req.body);
   status_retrieve.retrieve(req, res);
 })
-app.put('/status/update', (req, res) => {
+app.post('/status/update', (req, res) => {
   console.log(req.body);
   status_update.update(req, res);
 })
-app.put('/status/delete/:account_id', (req, res) => {
+app.post('/status/delete/:account_id', (req, res) => {
   console.log(req.body);
   status_delete.remove(req, res);
 })

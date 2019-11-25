@@ -31,11 +31,16 @@ let auth =  (req, res) => {
       if (bcrypt.compareSync(req.body.password, results[0].password)) {
         connection.query("SELECT * FROM `accounts` WHERE `id` = '" +results[1].id+"'", function(error, user, fields) {
           if (error) {
-            res.status(401).send(error);
+            res.status(401).json({
+              error : error,
+              data : null,
+            });
             return
           }
           if (user[0] == undefined) {
             res.status(401).json({
+              error : error,
+              data : null,
               message : "No results found."
             })
           } else {
@@ -55,6 +60,8 @@ let auth =  (req, res) => {
         })
       } else {
         res.status(401).json({
+          error : error,
+          data : null,
           message: "Validation failed. Given username and password aren't matching."
         });
       }

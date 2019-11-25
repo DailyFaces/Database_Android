@@ -37,13 +37,50 @@ let create = (req, res) => {
     "')";
   connection.query(stmt, function (error, results, fields) {
     if (error) {
-      res.status(401).send(error)
+      res.status(401).json({
+        error : error,
+        data : null
+      });
       return;
     }
     if (results[0] == undefined) {
-      res.status(200).json({
-        message: "Successfully created!"
-      });
+      connection.query(stmt, function (error, results2, fields) {
+        if (error) {
+          res.status(401).json({
+            error : error,
+            data : null
+          });
+            return;
+        }
+        if (results2[0] == undefined) {
+          res.status(401).json({
+            error : error,
+            data : null
+          });
+        } else {
+            connection.query("SELECT * FROM `accounts_informations` WHERE `account_id`='" + account_id + "'", function (error, results, fields) {
+                if (error) {
+                  res.status(401).json({
+                    error : error,
+                    data : null
+                  });
+                    return;
+                }
+                if (results[0] == undefined) {
+                  res.status(401).json({
+                    error : error,
+                    data : null
+                  });
+                } else {
+                  res.status(401).json({
+                    error : null,
+                    data : results[0],
+                    message : "Successfully created."
+                  });
+                }
+            });
+        }
+    });
     }
   });
 }

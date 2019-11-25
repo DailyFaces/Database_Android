@@ -43,7 +43,10 @@ let update = (req, res) => {
 
     connection.query(stmt1, function (error, results1, fields) {
         if (error) {
-            res.status(401).send(error);
+            res.status(401).json({
+              error : error,
+              data : null
+            });
             return;
         }
         if (results1[0] == undefined) {
