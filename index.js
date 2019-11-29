@@ -16,6 +16,7 @@ app.use(function (req, res, next) {
 });
 
 
+
 // removed unused imports
 // create connection as global
 //importing Account CRUD
@@ -74,26 +75,39 @@ app.post('/ms-members/create/:id', (req, res) => {
 })
 
 app.post('/ms-members/retrieve/all', (req, res) => {
-  ms_member_crud.retrieve.all_retrieve_ms_member(req,res);
+  ms_member_crud.retrieve.all_retrieve_ms_member(req, res);
 })
 app.post('/ms-members/retrieve/active', (req, res) => {
-  ms_member_crud.retrieve.retrieve_ms_member(req,res);
+  ms_member_crud.retrieve.retrieve_ms_member(req, res);
 })
 
 app.post('/ms-members/update/:id', (req, res) => {
-  ms_member_crud.update.update_ms_member(req,res);
+  ms_member_crud.update.update_ms_member(req, res);
 })
 
 app.post('/ms-members/delete/:id', (req, res) => {
-  ms_member_crud.delete.delete_ms_member(req,res);
+  ms_member_crud.delete.delete_ms_member(req, res);
 })
 
 //importing ms_messages_CRUD
 const ms_messages_crud = require('./ms_messages_CRUD/ms_messages_crud');
 
-app.post('/ms-messages/create',(req,res) => {
-  ms_messages_crud.create.create_ms_message(req,res);
+app.post('/ms-messages/create/:id', (req, res) => {
+  ms_messages_crud.create.create_ms_message(req, res);
 })
+
+app.post('/ms-messages/retrieve/all', (req, res) => {
+  ms_messages_crud.retrieve.all_retrieve_ms_message(req, res);
+})
+
+app.post('/ms-messages/retrieve/active', (req, res) => {
+  ms_messages_crud.retrieve.retrieve_ms_message(req, res);
+})
+
+app.post('/ms-messages/update/:id', (req, res) => {
+  ms_messages_crud.update.update_ms_message(req, res);
+})
+
 
 app.listen(PORT, function () {
   console.log("listening on *: " + PORT);
