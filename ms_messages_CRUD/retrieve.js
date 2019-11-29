@@ -32,7 +32,7 @@ let retrieve_ms_message = (req, res) => {
         }
         let filtered_results = []
         results.forEach(data => {
-            if (data.deleted_at == null) {
+            if (data.ms_group_id == req.body.ms_group_id) {
                 filtered_results.push(data);
             }
         });

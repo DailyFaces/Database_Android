@@ -3,21 +3,21 @@ var connection = require('../system/db_connection');
 let Response = require("../account_CRUD/helpers/response");
 let response = new Response(); //response object
 
+//importing pusher
+const my_pusher = require('../account_CRUD/helpers/pusher')
+
 let create_ms_message = (req, res) => {
-    const ms_group_id = req.body.id;
-    const account_id = req.body.account_id;
-    const message = req.body.message;
-    const created_at = new Date().toISOString();
+    req.body['created_at'] = new Date().toISOString();
 
     let stmt =
         "INSERT INTO `ms_messages`(`ms_group_id`,`account_id`, `message`, `created_at`) VALUES ('" +
-        ms_group_id +
+        req.body.ms_group_id +
         "','" +
-        account_id +
+        req.body.account_id +
         "','" +
-        message +
+        req.body.message +
         "','" +
-        created_at +
+        req.body.created_at +
         "')";
 
     connection.query(stmt, (error, results) => {
@@ -27,6 +27,7 @@ let create_ms_message = (req, res) => {
         }
         if (results[0] == undefined) {
             response.setRespose({ message: "ms_message Successfully Added!" },null, new Date().toISOString());
+            my_pusher.pusher(req.body); //invoking pusher module
             return res.status(200).json(response);
         }
     });
