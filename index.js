@@ -2,11 +2,9 @@ const app = require("express")();
 const express = require("express");
 const http = require("http").createServer(app);
 const port = process.env.PORT || 3000;
-var router = express.Router();
+const router = express.Router();
 const bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const multer = require('multer');
 
 //importing Account CRUD
 const account_create = require('./account_CRUD/create')
@@ -27,6 +25,16 @@ const status_retrieve = require('./account_status/retrieve')
 const status_update = require('./account_status/update')
 const status_delete = require('./account_status/delete')
 
+//importing images
+const images_create  = require('./images/create')
+const images_retrieve = require('./images/retrieve')
+const images_delete = require('./images/delete')
+
+//importing feed images
+const feed_images_create  = require('./feeds_images/create')
+const feed_images_retrieve = require('./feeds_images/retrieve')
+const feed_images_delete = require('./feeds_images/delete')
+
 const checkToken = (req, res, next) => {
   console.log(req.headers)
   const header = req.headers['authorization'];
@@ -42,6 +50,32 @@ const checkToken = (req, res, next) => {
       res.sendStatus(403)
   }
 }
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './public/images');
+    },
+    filename: (req, file, cb) => {
+        var filetype = '';
+
+        if (file.mimetype === 'image/gif') {
+            filetype = 'gif';
+        }
+        if (file.mimetype === 'image/png') {
+            filetype = 'png';
+        }
+        if (file.mimetype === 'image/jpeg') {
+            filetype = 'jpg';
+        }
+        cb(null, file.fieldname + Date.now() + '.' + filetype);
+    }
+});
+
+const upload = multer({ storage: storage });
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public'));
+
 //routes for accounts
 app.post('/auth/user', checkToken, function (req, res) {
   console.log(req.body);
@@ -99,6 +133,28 @@ app.post('/status/delete/:account_id', (req, res) => {
   console.log(req.body);
   status_delete.remove(req, res);
 })
+
+//router for images
+app.post('/images/create', upload.single('file'), function (req, res) {
+    images_create.create(req, res);
+})
+app.get('/images/:filename', function (req, res) {
+    images_retrieve.retrieve(req, res);
+})
+app.put('/images/delete', function (req, res) {
+    images_delete.remove(req, res);
+});
+
+//routes for feeds images
+app.post('/feeds/images/create', upload.single('file'), function (req, res) {
+    feed_images_create.create(req, res);
+})
+app.get('/feeds/images/:filename', function (req, res) {
+    feed_images_retrieve.retrieve(req, res);
+})
+app.put('/feeds/images/delete', function (req, res) {
+    feed_images_delete.remove(req, res);
+});
 
 http.listen(port, function() {
   console.log("listening on *: " + port);
