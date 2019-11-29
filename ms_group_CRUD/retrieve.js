@@ -37,10 +37,7 @@ let retrieve_ms_group = (req, res) => {
             if (data.deleted_at == null) {
                 filtered_results.push(data);
             }
-            else{
-                console.log(data);
-                
-            }
+           
         });
 
         if (filtered_results.length != 0) {

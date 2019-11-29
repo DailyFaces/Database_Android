@@ -19,7 +19,7 @@ let update_ms_message = (req, res) => {
   connection.query(stmt, (error, results) => {
     if (error) {
       response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
-      return res.status(401).send(response);
+      return res.status(401).json(response);
     }
     if (results[0] == undefined) {
       response.setRespose({ message: "ms_message Updated Successfully!", err: error }, null, new Date().toISOString());

@@ -17,12 +17,12 @@ let delete_ms_group = (req, res) => {
     connection.query(stmt2, (error, results) => {
         if (error) {
             response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
-            return res.status(401).send(response);
+            return res.status(401).json(response);
 
         }
         if (results[0] == undefined) {
             response.setRespose({ message: "Successfully deleted!" }, null, new Date().toISOString());
-            return res.status(200).send(response);
+            return res.status(200).json(response);
         }
     });
 }

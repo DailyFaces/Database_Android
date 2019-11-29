@@ -17,7 +17,7 @@ let all_retrieve_ms_message = (req, res) => {
         }
         if (results.length != 0) {
             response.setRespose({ message: "All ms_message Successfully Retrieved!", data: results }, null, new Date().toISOString());
-            return res.status(200).send(response);
+            return res.status(200).json(response);
         }
     });
 }
@@ -28,7 +28,7 @@ let retrieve_ms_message = (req, res) => {
     connection.query(stmt, (error, results) => {
         if (error) {
             response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
-            return res.status(401).send(response);
+            return res.status(401).json(response);
         }
         let filtered_results = []
         results.forEach(data => {
@@ -39,7 +39,7 @@ let retrieve_ms_message = (req, res) => {
 
         if (filtered_results.length != 0) {
             response.setRespose({ message: "Active ms_message Successfully Retrieved!", data: filtered_results }, null, new Date().toISOString());
-            return res.status(200).send(response);
+            return res.status(200).json(response);
         }
     });
 }
