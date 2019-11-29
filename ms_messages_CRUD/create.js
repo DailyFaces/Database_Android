@@ -4,7 +4,7 @@ let Response = require("../account_CRUD/helpers/response");
 let response = new Response(); //response object
 
 let create_ms_message = (req, res) => {
-    const ms_group_id = req.params.id;
+    const ms_group_id = req.body.id;
     const account_id = req.body.account_id;
     const message = req.body.message;
     const created_at = new Date().toISOString();

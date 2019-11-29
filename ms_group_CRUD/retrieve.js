@@ -7,8 +7,8 @@ let response = new Response(); //response object
 //all created group chat
 let all_retrieve_ms_group = (req, res) => {
 
-    let stmt = "SELECT * FROM `ms_groups`"
-    // let stmt = "SELECT * FROM `ms_groups` JOIN accounts AS a ON a.id = ms_groups.account_id"
+    // let stmt = "SELECT * FROM `ms_groups`"
+    let stmt = "SELECT m.id, a.username, a.type, m.title FROM `ms_groups` AS m JOIN accounts AS a ON a.id = m.account_id"
 
     connection.query(stmt, (error, results) => {
         if (error) {
@@ -24,7 +24,9 @@ let all_retrieve_ms_group = (req, res) => {
 
 //active group chats
 let retrieve_ms_group = (req, res) => {
-    let stmt = "SELECT * FROM `ms_groups`"
+    // let stmt = "SELECT * FROM `ms_groups`"
+    let stmt = "SELECT m.id, a.username, a.type, m.title FROM `ms_groups` AS m JOIN accounts AS a ON a.id = m.account_id"
+
     connection.query(stmt, (error, results) => {
         if (error) {
             response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
@@ -35,10 +37,18 @@ let retrieve_ms_group = (req, res) => {
             if (data.deleted_at == null) {
                 filtered_results.push(data);
             }
+            else{
+                console.log(data);
+                
+            }
         });
 
         if (filtered_results.length != 0) {
             response.setRespose({ message: "Active ms_groups Successfully Retrieved!", data: filtered_results }, null, new Date().toISOString());
+            return res.status(200).json(response);
+        }
+        else{
+            response.setRespose({ message: "Empty!", data: filtered_results }, null, new Date().toISOString());
             return res.status(200).json(response);
         }
     });
