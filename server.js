@@ -27,10 +27,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.static('public'));
 
-
-
-//upload image
-
 var multer = require('multer');
 
 var storage = multer.diskStorage({
@@ -54,7 +50,6 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-
 app.post('/create', upload.single('file'), function (req, res, next) {
     console.log(req.file)
     let url = '/images/' + req.file.filename;
@@ -70,16 +65,12 @@ app.post('/create', upload.single('file'), function (req, res, next) {
     })
 })
 
-
-//retrieve image
-
 app.get('/images/:filename', function (req, res) {
     console.log(req.params.filename)
     let file = __dirname + '/public/images/' + req.params.filename;
     res.sendFile(file);
 })
 
-//delete
 app.put('/imageDelete', function (req, res) {
     console.log(req.body.id);
     console.log('file received');
@@ -94,8 +85,6 @@ app.put('/imageDelete', function (req, res) {
 
     })
 });
-
-
 
 app.listen(port, function () {
     console.log('Server is running on PORT', port);
