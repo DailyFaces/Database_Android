@@ -93,6 +93,8 @@ app.post('/ms-members/delete/:id', (req, res) => {
 const ms_messages_crud = require('./ms_messages_CRUD/ms_messages_crud');
 
 app.post('/ms-messages/create/:id', (req, res) => {
+  console.log(req.body);
+
   ms_messages_crud.create.create_ms_message(req, res);
 })
 

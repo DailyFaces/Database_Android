@@ -27,7 +27,7 @@ let create_ms_message = (req, res) => {
         }
         if (results[0] == undefined) {
             response.setRespose({ message: "ms_message Successfully Added!" },null, new Date().toISOString());
-            res.status(200).json(response);
+            return res.status(200).json(response);
         }
     });
 }
