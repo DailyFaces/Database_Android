@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,5 +25,8 @@
     "mysql": "^2.17.1",
     "mysql-migrations": "^1.0.6",
     "pusher": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
   }
 }

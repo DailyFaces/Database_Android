@@ -31,15 +31,14 @@ let reactions_update = (req, res) => {
 }
 
 let reactions_handler = (req, res) => {
-    let walapa = `SELECT *  FROM reactions WHERE account_id = ${req.body.account_id}  AND feed_id = ${req.body.feedId}`
+    let walapa = `SELECT *  FROM reactions WHERE 'account_id' = ${req.body.account_id}  AND 'feed_id' = ${req.body.feedId}`
     connection.query(walapa, function (error, results, fields) {
         if (error) {
             response.setRespose(null, { message: "Error encountered!!!", body: error }, new Date().toISOString());
             return res.status(404).send(response);
-        } else {
+        } else {    
             if (results.length === 0) {
                 console.log("to insert");
-
                 return reactions_create(req, res)
             } else {
                 console.log("to update");

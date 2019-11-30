@@ -19,7 +19,7 @@ const feeds_delete = require('./feed_CRUD/delete')
 const reactions_create = require('./reaction_CRUD/create')
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }))
-app.get('/auth/user', function (req, res, next) {
+app.post('/auth/user', function (req, res, next) {
   account_auth_user.auth_user(req, res);
 })
 // USER CRUD
@@ -27,15 +27,15 @@ app.post("/accounts/create", function (req, res) {
   account_create.create_account(req, res);
 });
 
-app.get("/auth", function (req, res) {
+app.post("/auth", function (req, res) {
   account_auth.auth(req, res);
 });
 
-app.put("/accounts/update", function (req, res) {
+app.post("/accounts/update", function (req, res) {
   account_update.update(req, res);
 });
 
-app.delete("/accounts/delete", function (req, res) {
+app.post("/accounts/delete", function (req, res) {
   account_delete.account_delete(req, res);
 });
 
@@ -45,14 +45,14 @@ app.post('/feeds/create', function (req, res) {
   feeds_create.feeds_create(req, res);
 })
 
-app.get('/feeds/retrieve', function (req, res) {
+app.post('/feeds/retrieve', function (req, res) {
   feeds_retrieve.feeds_retrieve(req, res);
 })
-app.put('/feeds/delete', function (req, res) {
+app.post('/feeds/delete', function (req, res) {
   feeds_delete.feeds_delete(req, res);
 })
 
-app.put('/feeds/update', function (req, res) {
+app.post('/feeds/update', function (req, res) {
   feeds_update.feeds_update(req, res);
 })
 //REACTION
