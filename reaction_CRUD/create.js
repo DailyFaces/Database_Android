@@ -4,7 +4,7 @@ const updated_at = new Date().toISOString()
 let Response = require("../helpers/response");
 let response = new Response(); //response object
 let reactions_create = (req, res) => {
-    let createStmt = `INSERT INTO reactions (account_id, feed_id , type , created_at ) VALUES (${req.body.account_id},${req.body.feedId},'${req.body.type}','${created_at}') `
+    let createStmt = `INSERT INTO reactions (account_id, feed_id , type , created_at ) VALUES (${req.body.account_id},${req.body.feedId},'${req.body.type}','${created_at}')`
     connection.query(createStmt, function (error, results, fields) {
         if (error) {
             response.setRespose(null, { message: "Error encountered!!!", body: error }, new Date().toISOString());
@@ -16,7 +16,7 @@ let reactions_create = (req, res) => {
     })
 }
 let reactions_update = (req, res) => {
-    let updateStmt = `UPDATE reactions SET account_id =${req.body.account_id}, feed_id=${req.body.feedId},type='${req.body.type}',updated_at='${updated_at}' `
+    let updateStmt = `UPDATE reactions SET account_id =${req.body.account_id}, feed_id=${req.body.feedId},type='${req.body.type}',updated_at='${updated_at}' WHERE id = ${req.body.id}  `
     connection.query(updateStmt, function (error, results, fields) {
         if (error) {
             response.setRespose(null, { message: "Error encountered!!!", body: error }, new Date().toISOString());
@@ -29,8 +29,10 @@ let reactions_update = (req, res) => {
 }
 
 let reactions_handler = (req, res) => {
-    let checkIfExist = `SELECT *  FROM reactions WHERE 'account_id' = ${req.body.account_id}  AND 'feed_id' = ${req.body.feedId}`
+    let checkIfExist = `SELECT *  FROM reactions WHERE account_id = ${req.body.account_id}  AND feed_id = ${req.body.feedId}`
     connection.query(checkIfExist, function (error, check, fields) {
+        console.log(checkIfExist);
+        
         if (error) {
             response.setRespose(null, { message: "Error encountered!!!", body: error }, new Date().toISOString());
             return res.status(404).send(response);
