@@ -1,7 +1,7 @@
 const connection = require('../system/db_connection')
 let Response = require("../helpers/response");
 let response = new Response(); //response object
-let reactions_retrieve = (req, res) => {
+let reactions_retrieve = (res) => {
     let retrieve = "select reaction.id, reaction.feed_id, reaction.account_id, account.username, reaction.type, reaction.created_at FROM accounts AS account JOIN reactions AS reaction ON account.id = reaction.id WHERE reaction.deleted_at IS NULL"
     connection.query(retrieve, function (error, results, fields) {
         if (error) {

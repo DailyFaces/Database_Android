@@ -9,6 +9,7 @@ let feeds_update = (req, res) => {
             response.setRespose(null, { message: "Error encountered!!!", body: error }, new Date().toISOString());
             return res.status(404).send(response);
         } else {
+            broadcast_update_post();
             response.setRespose({ message: "Success!!!.", details: results }, null, new Date().toISOString());
             return res.status(200).send(response);
         }

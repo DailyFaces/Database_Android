@@ -8,4 +8,17 @@ var pusher = new Pusher({
     encrypted: true
 });
 
-module.exports = pusher
+// feed - create
+global.broadcast_create_post = (post) => {
+    pusher.trigger('daily-faces', 'new-post', post);
+}
+
+// feed - delete
+global.broadcast_delete_post = () => {
+    pusher.trigger('daily-faces', 'delete-post', null);
+}
+
+// feed - update
+global.broadcast_update_post = () => {
+    pusher.trigger('daily-faces', 'update-post', null);
+}

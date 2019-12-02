@@ -12,6 +12,7 @@ let feeds_delete = (req, res) => {
             response.setRespose(null, { message: "Error encountered!!!", body: error }, new Date().toISOString());
             return res.status(404).send(response);
         } else {
+            broadcast_delete_post();
             response.setRespose({ message: "Success!!!.", details: results }, null, new Date().toISOString());
             return res.status(200).send(response);
         }
