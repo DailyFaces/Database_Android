@@ -24,28 +24,43 @@ let all_retrieve_ms_group = (req, res) => {
 
 //active group chats
 let retrieve_ms_group = (req, res) => {
-    // let stmt = "SELECT * FROM `ms_groups`"
-    let stmt = "SELECT m.id, a.username, a.type, m.title FROM `ms_groups` AS m JOIN accounts AS a ON a.id = m.account_id"
-
-    connection.query(stmt, (error, results) => {
+    let data  = {}
+    let stmt_ms_accounts = "SELECT username,email,type FROM `accounts`"
+    connection.query(stmt_ms_accounts, (error, results) => {
         if (error) {
-            response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+            data.ms_users = null
+        }
+        else{
+            data.ms_users = results
+        }
+    });
+
+    let stmt_ms_group = "SELECT m.id, a.username, a.type, m.title FROM `ms_groups` AS m JOIN accounts AS a ON a.id = m.account_id"
+
+    
+    connection.query(stmt_ms_group, (error, results) => {
+        if (error) {
+            data.ms_groups = error
+            response.setRespose(null, { message: "An error occured!", err: data }, new Date().toISOString());
             return res.status(401).json(response);
         }
+
         let filtered_results = []
         results.forEach(data => {
             if (data.deleted_at == null) {
                 filtered_results.push(data);
             }
-           
         });
 
+        data.ms_groups = filtered_results
+
         if (filtered_results.length != 0) {
-            response.setRespose({ message: "Active ms_groups Successfully Retrieved!", data: filtered_results }, null, new Date().toISOString());
+            response.setRespose({ message: "Active ms_groups Successfully Retrieved!", data: data }, null, new Date().toISOString());
             return res.status(200).json(response);
         }
+
         else{
-            response.setRespose({ message: "Empty!", data: filtered_results }, null, new Date().toISOString());
+            response.setRespose(null, { message: "No Group Exist!", data: data }, new Date().toISOString());
             return res.status(200).json(response);
         }
     });
