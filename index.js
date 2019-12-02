@@ -4,6 +4,7 @@ const http = require("http").createServer(app);
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const fs = require('fs')
 
 //importing Account CRUD
 const account_create = require('./account_CRUD/create')
@@ -47,6 +48,7 @@ const feeds_create = require('./feed_CRUD/create')
 const feeds_retrieve = require('./feed_CRUD/retrieve')
 const feeds_update = require('./feed_CRUD/update')
 const feeds_delete = require('./feed_CRUD/delete')
+
 //importing reaction CRUD
 const reactions_create = require('./reaction_CRUD/create')
 const reactions_delete = require('./reaction_CRUD/delete')
@@ -86,9 +88,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+app.use(bodyParser.json({ limit: "50mb" }))
 
 //routes for accounts
 app.post('/auth/user', checkToken, function (req, res) {  account_auth_user.auth_user(req, res);})
@@ -110,19 +112,43 @@ app.post('/status/update', (req, res) => {  status_update.update(req, res);})
 app.post('/status/delete/:account_id', (req, res) => {  status_delete.remove(req, res);})
 
 //routes for account profiles
-app.post('/profiles/create', upload.single('file'), (req, res) => {  profiles_create.create(req, res)})
+app.post('/profiles/create', upload.single('file'), (req, res) => { 
+  var raw = new Buffer(req.body.image.toString(), 'base64')
+  let filename = Date.now() + req.body.extension
+  fs.writeFile('./public/images/' + filename, raw, function (err) {
+    if (err) {console.log(err)}
+  })
+  req.body['filename'] = filename
+   profiles_create.create(req, res)}
+   )
 app.get('/profiles/retrieve', (req, res) => {  profiles_retrieveAll.retrieve(req, res)})
 app.get('/profiles/:filename', (req, res) => {  profiles_retrieve.retrieve(req, res)})
 app.post('/profiles/delete', (req, res) => {  profiles_delete.remove(req, res)})
 
 //router for images
-app.post('/images/create', upload.single('file'), function (req, res) {  images_create.create(req, res);})
+
+app.post('/images/create', upload.single('file'), function (req, res) { 
+  var raw = new Buffer(req.body.image.toString(), 'base64')
+  let filename = Date.now() + req.body.extension
+  fs.writeFile('./public/images/' + filename, raw, function (err) {
+    if (err) {console.log(err)}
+  })
+  req.body['filename'] = filename
+  images_create.create(req, res);
+})
 app.get('/images/retrieve', (req, res) => {  images_retrieveAll.retrieve(req, res)})
 app.get('/images/:filename', function (req, res) {  images_retrieve.retrieve(req, res);})
 app.post('/images/delete', function (req, res) {  images_delete.remove(req, res);});
 
 //routes for feeds images
-app.post('/feeds/images/create', upload.single('file'), function (req, res) {  feed_images_create.create(req, res);})
+app.post('/feeds/images/create', upload.single('file'), function (req, res) { 
+  var raw = new Buffer(req.body.image.toString(), 'base64')
+  let filename = Date.now() + req.body.extension
+  fs.writeFile('./public/images/' + filename, raw, function (err) {
+    if (err) {console.log(err)}
+  })
+  req.body['filename'] = filename 
+  feed_images_create.create(req, res);})
 app.get('/feeds/images/retrieve', (req, res) => { feed_images_retrieveAll.retrieve(req, res)})
 app.get('/feeds/images/:filename', function (req, res) {  feed_images_retrieve.retrieve(req, res);})
 app.post('/feeds/images/delete', function (req, res) {  feed_images_delete.remove(req, res);});
