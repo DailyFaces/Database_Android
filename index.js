@@ -2,7 +2,6 @@ const app = require("express")();
 const express = require("express");
 const http = require("http").createServer(app);
 const port = process.env.PORT || 3000;
-const router = express.Router();
 const bodyParser = require('body-parser');
 const multer = require('multer');
 
@@ -54,7 +53,6 @@ const reactions_delete = require('./reaction_CRUD/delete')
 const reactions_retrieve = require('./reaction_CRUD/retrieve')
 
 const checkToken = (req, res, next) => {
-  console.log(req.headers)
   const header = req.headers['authorization'];
 
   if (typeof header !== 'undefined') {
@@ -69,9 +67,7 @@ const checkToken = (req, res, next) => {
   }
 }
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, './public/images');
-  },
+  destination: (req, file, cb) => {    cb(null, './public/images');  },
   filename: (req, file, cb) => {
     var filetype = '';
 
@@ -95,130 +91,52 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 //routes for accounts
-app.post('/auth/user', checkToken, function (req, res) {
-  console.log(req.body);
-  account_auth_user.auth_user(req, res);
-})
-app.post("/accounts/create", function (req, res) {
-  console.log(req.body);
-  account_create.create_account(req, res);
-});
-app.post("/auth", function (req, res) {
-  console.log(req.body);
-  account_auth.auth(req, res);
-});
-app.post("/accounts/update", function (req, res) {
-  console.log(req.body);
-  account_update.update(req, res);
-});
-app.post("/accounts/delete", function (req, res) {
-  console.log(req.body);
-  account_delete.account_delete(req, res);
-});
+app.post('/auth/user', checkToken, function (req, res) {  account_auth_user.auth_user(req, res);})
+app.post("/accounts/create", function (req, res) {  account_create.create_account(req, res);});
+app.post("/auth", function (req, res) {  account_auth.auth(req, res);});
+app.post("/accounts/update", function (req, res) {  account_update.update(req, res);});
+app.post("/accounts/delete", function (req, res) {  account_delete.account_delete(req, res);});
 
 //routes for account profiles
-app.post('/informations/create', (req, res) => {
-  console.log(req.body);
-  information_create.create(req, res);
-})
-app.post('/informations/retrieve/:account_id', (req, res) => {
-  console.log(req.body);
-  information_retrieve.retrieve(req, res);
-})
-app.post('/informations/update', (req, res) => {
-  console.log(req.body);
-  information_update.update(req, res);
-})
-app.post('/informations/delete/:account_id', (req, res) => {
-  console.log(req.body);
-  information_delete.remove(req, res);
-})
+app.post('/informations/create', (req, res) => {  information_create.create(req, res);})
+app.post('/informations/retrieve/:account_id', (req, res) => {  information_retrieve.retrieve(req, res);})
+app.post('/informations/update', (req, res) => {  information_update.update(req, res);})
+app.post('/informations/delete/:account_id', (req, res) => {  information_delete.remove(req, res);})
 
 //routes for account status
-app.post('/status/create', (req, res) => {
-  console.log(req.body);
-  status_create.create(req, res);
-})
-app.post('/status/:account_id', (req, res) => {
-  console.log(req.body);
-  status_retrieve.retrieve(req, res);
-})
-app.post('/status/update', (req, res) => {
-  console.log(req.body);
-  status_update.update(req, res);
-})
-app.post('/status/delete/:account_id', (req, res) => {
-  console.log(req.body);
-  status_delete.remove(req, res);
-})
+app.post('/status/create', (req, res) => {  status_create.create(req, res);})
+app.post('/status/:account_id', (req, res) => {  status_retrieve.retrieve(req, res);})
+app.post('/status/update', (req, res) => {  status_update.update(req, res);})
+app.post('/status/delete/:account_id', (req, res) => {  status_delete.remove(req, res);})
 
 //routes for account profiles
-app.post('/profiles/create', upload.single('file'), (req, res) => {
-  profiles_create.create(req, res)
-})
-app.get('/profiles/retrieve', (req, res) => {
-  profiles_retrieveAll.retrieve(req, res)
-})
-app.get('/profiles/:filename', (req, res) => {
-  profiles_retrieve.retrieve(req, res)
-})
-app.post('/profiles/delete', (req, res) => {
-  profiles_delete.remove(req, res)
-})
+app.post('/profiles/create', upload.single('file'), (req, res) => {  profiles_create.create(req, res)})
+app.get('/profiles/retrieve', (req, res) => {  profiles_retrieveAll.retrieve(req, res)})
+app.get('/profiles/:filename', (req, res) => {  profiles_retrieve.retrieve(req, res)})
+app.post('/profiles/delete', (req, res) => {  profiles_delete.remove(req, res)})
 
 //router for images
-app.post('/images/create', upload.single('file'), function (req, res) {
-  images_create.create(req, res);
-})
-app.get('/images/retrieve', (req, res) => {
-  images_retrieveAll.retrieve(req, res)
-})
-app.get('/images/:filename', function (req, res) {
-  images_retrieve.retrieve(req, res);
-})
-app.post('/images/delete', function (req, res) {
-  images_delete.remove(req, res);
-});
+app.post('/images/create', upload.single('file'), function (req, res) {  images_create.create(req, res);})
+app.get('/images/retrieve', (req, res) => {  images_retrieveAll.retrieve(req, res)})
+app.get('/images/:filename', function (req, res) {  images_retrieve.retrieve(req, res);})
+app.post('/images/delete', function (req, res) {  images_delete.remove(req, res);});
 
 //routes for feeds images
-app.post('/feeds/images/create', upload.single('file'), function (req, res) {
-  feed_images_create.create(req, res);
-})
-app.get('/feeds/images/retrieve', (req, res) => {
-  feed_images_retrieveAll.retrieve(req, res)
-})
-app.get('/feeds/images/:filename', function (req, res) {
-  feed_images_retrieve.retrieve(req, res);
-})
-app.post('/feeds/images/delete', function (req, res) {
-  feed_images_delete.remove(req, res);
-});
+app.post('/feeds/images/create', upload.single('file'), function (req, res) {  feed_images_create.create(req, res);})
+app.get('/feeds/images/retrieve', (req, res) => { feed_images_retrieveAll.retrieve(req, res)})
+app.get('/feeds/images/:filename', function (req, res) {  feed_images_retrieve.retrieve(req, res);})
+app.post('/feeds/images/delete', function (req, res) {  feed_images_delete.remove(req, res);});
 
 //FEEDS CRUD
-app.post('/feeds/create', function (req, res) {
-  feeds_create.feeds_create(req, res);
-});
-
-app.post('/feeds/retrieve', function (req, res) {
-  feeds_retrieve.feeds_retrieve(req, res);
-});
-app.post('/feeds/delete', function (req, res) {
-  feeds_delete.feeds_delete(req, res);
-});
-app.post('/feeds/update', function (req, res) {
-  feeds_update.feeds_update(req, res);
-});
+app.post('/feeds/create', function (req, res) {  feeds_create.feeds_create(req, res);});
+app.post('/feeds/retrieve', function (req, res) {  feeds_retrieve.feeds_retrieve(req, res);});
+app.post('/feeds/delete', function (req, res) {  feeds_delete.feeds_delete(req, res);});
+app.post('/feeds/update', function (req, res) {  feeds_update.feeds_update(req, res);});
 
 //REACTION
-app.post('/reactions/create', function (req, res) {
-  reactions_create.reactions_handler(req, res);
-});
-app.post('/reactions/delete', function (req, res) {
-  reactions_delete.reactions_delete(req, res);
-});
-app.post('/reactions/retrieve', function (req, res) {
-  reactions_retrieve.reactions_retrieve(req, res);
-});
+app.post('/reactions/create', function (req, res) {  reactions_create.reactions_handler(req, res);});
+app.post('/reactions/delete', function (req, res) {  reactions_delete.reactions_delete(req, res);});
+app.post('/reactions/retrieve', function (req, res) {  reactions_retrieve.reactions_retrieve(req, res);});
 
 
 http.listen(port, function () {
