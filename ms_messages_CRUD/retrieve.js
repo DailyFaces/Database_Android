@@ -28,17 +28,23 @@ let retrieve_ms_message = (req, res) => {
     connection.query(stmt, (error, results) => {
         if (error) {
             response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
-            return res.status(401).json(response);
+            return res.status(200).json(response);
         }
         let filtered_results = []
         results.forEach(data => {
             if (data.ms_group_id == req.body.ms_group_id) {
-                filtered_results.push(data);
+                if (data.deleted_at == null) {
+                    filtered_results.push(data);
+                }
             }
         });
 
         if (filtered_results.length != 0) {
             response.setRespose({ message: "Active ms_message Successfully Retrieved!", data: filtered_results }, null, new Date().toISOString());
+            return res.status(200).json(response);
+        }
+        else {
+            response.setRespose({ message: "NO Active ms_message Retrieved!", data: filtered_results }, null, new Date().toISOString());
             return res.status(200).json(response);
         }
     });

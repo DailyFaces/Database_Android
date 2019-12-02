@@ -110,6 +110,9 @@ app.post('/ms-messages/update/:id', (req, res) => {
   ms_messages_crud.update.update_ms_message(req, res);
 })
 
+app.post('/ms-messages/delete', (req, res) => {
+  ms_messages_crud.delete.delete_ms_messages(req, res);
+})
 
 app.listen(PORT, function () {
   console.log("listening on *: " + PORT);
