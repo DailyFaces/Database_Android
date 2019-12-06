@@ -42,21 +42,42 @@ let retrieve_ms_group = (req, res) => {
                     return res.status(401).json({ message: "An error occured!", err: error });
                 }
 
-                // let filtered_results = []
-                // results.forEach(data => {
-                //     if (data.deleted_at == null) {
-                //         filtered_results.push(data);
-                //     }
-                // });
-
+                //all ms_groups
                 data.ms_groups = results
-
                 if (data.ms_groups.length != 0) {
                     // response.setRespose({ message: "Active ms_groups Successfully Retrieved! Here", data }, null, new Date().toISOString());
-                    
-                    return res.status(200).json(
-                        { message: "Active ms_groups Successfully Retrieved! Here", data: data }
-                    );
+                    //member in group
+                    //loop all ms_group
+                    // let ms_groups_id;
+                    // let stmt_ms_group_members = `SELECT * FROM ms_members WHERE id = '${ms_groups_id}'`
+
+                    data.ms_groups.forEach((element, index) => {
+                        console.log("ele");
+                        console.log(element.id);
+                        console.log("end");
+
+                        let stmt_ms_group_members = `SELECT * FROM ms_members WHERE ms_group_id = '${element.id}'`
+                        var tempMembers = [];
+                        connection.query(stmt_ms_group_members, (error1, members) => {
+                            if (error1) {
+                                console.log(error1);
+
+                            }
+                            else {
+                                console.log("meme");
+                                console.log(members);
+                                tempMembers = members
+                            }
+                            data.ms_groups[index]['ms_members'] = tempMembers;
+
+                            console.log(data);
+
+                            return res.status(200).json(
+                                { message: "Active ms_groups Successfully Retrieved! Here", data: data }
+                            );
+                        })
+                    });
+
                 }
 
                 else {
