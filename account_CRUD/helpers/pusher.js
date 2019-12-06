@@ -8,7 +8,7 @@ let pusher = (data) => {
         cluster: 'ap1'
     });
 
-    pusher.trigger('my-channel', 'my-event', data);
+    pusher.trigger('chat-channel-notification', 'chats', data);
 }
 
 module.exports = { pusher }

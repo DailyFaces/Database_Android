@@ -1,7 +1,7 @@
 //config db connection
 var connection = require('../system/db_connection');
-let Response = require("../account_CRUD/helpers/response");
-let response = new Response(); //response object
+// let Response = require("../account_CRUD/helpers/response");
+// let response = new Response(); //response object
 
 
 //all created group chat
@@ -24,43 +24,47 @@ let all_retrieve_ms_group = (req, res) => {
 
 //active group chats
 let retrieve_ms_group = (req, res) => {
-    let account_id = req.body.id
+    let account_id = req.body.account_id
     let data = {}
     let stmt_ms_accounts = "SELECT username,email,type FROM `accounts`"
     connection.query(stmt_ms_accounts, (error, users) => {
         if (error) {
             data.ms_users = null
+            return;
         }
         else {
             data.ms_users = users
-            let stmt_ms_group = "SELECT mg.title FROM `ms_groups` AS mg LEFT JOIN `ms_members` AS mm ON mm.account_id = mg.account_id"
+            let stmt_ms_group = `SELECT mg.* FROM ms_groups AS mg LEFT JOIN ms_members AS mm ON mm.account_id = mg.account_id WHERE mg.account_id = '${account_id}'`
             connection.query(stmt_ms_group, (error, results) => {
                 if (error) {
                     data.ms_groups = error
-                    response.setRespose(null, { message: "An error occured!", err: data }, new Date().toISOString());
-                    return res.status(401).json(response);
+                    // response.setRespose(null, { message: "An error occured!", err: error }, new Date().toISOString());
+                    return res.status(401).json({ message: "An error occured!", err: error });
                 }
 
-                let filtered_results = []
-                results.forEach(data => {
-                    if (data.deleted_at == null) {
-                        filtered_results.push(data);
-                    }
-                });
+                // let filtered_results = []
+                // results.forEach(data => {
+                //     if (data.deleted_at == null) {
+                //         filtered_results.push(data);
+                //     }
+                // });
 
-                data.ms_groups = filtered_results
+                data.ms_groups = results
 
-                if (filtered_results.length != 0) {
-                    response.setRespose({ message: "Active ms_groups Successfully Retrieved!", data: data }, null, new Date().toISOString());
-                    return res.status(200).json(response);
+                if (data.ms_groups.length != 0) {
+                    // response.setRespose({ message: "Active ms_groups Successfully Retrieved! Here", data }, null, new Date().toISOString());
+                    
+                    return res.status(200).json(
+                        { message: "Active ms_groups Successfully Retrieved! Here", data: data }
+                    );
                 }
 
                 else {
-                    response.setRespose(null, { message: "No Group Exist!", data: data }, new Date().toISOString());
-                    return res.status(200).json(response);
+                    // response.setRespose(null, { message: "No Group Exist!", data: data }, new Date().toISOString());
+                    return res.status(200).json({ error: false, message: "No Group Exist!", data: data });
                 }
             });
-
+            return;
         }
     });
 
