@@ -102,7 +102,7 @@ app.post("/accounts/delete", function (req, res) {  account_delete.account_delet
 //routes for account profiles
 app.post('/informations/create', (req, res) => {  information_create.create(req, res);})
 app.post('/informations/retrieve/:account_id', (req, res) => {  information_retrieve.retrieve(req, res);})
-app.post('/informations/update', (req, res) => {  information_update.update(req, res);})
+app.post('/informations/update', (req, res) => {  console.log(req.body);information_update.update(req, res);})
 app.post('/informations/delete/:account_id', (req, res) => {  information_delete.remove(req, res);})
 
 //routes for account status
@@ -119,7 +119,8 @@ app.post('/profiles/create', upload.single('file'), (req, res) => {
     if (err) {console.log(err)}
   })
   req.body['filename'] = filename
-   profiles_create.create(req, res)}
+   profiles_create.create(req, res)
+   images_create.create(req, res);}
    )
 app.get('/profiles/retrieve', (req, res) => {  profiles_retrieveAll.retrieve(req, res)})
 app.get('/profiles/:filename', (req, res) => {  profiles_retrieve.retrieve(req, res)})
@@ -148,7 +149,8 @@ app.post('/feeds/images/create', upload.single('file'), function (req, res) {
     if (err) {console.log(err)}
   })
   req.body['filename'] = filename 
-  feed_images_create.create(req, res);})
+  feed_images_create.create(req, res);
+  images_create.create(req, res);})
 app.get('/feeds/images/retrieve', (req, res) => { feed_images_retrieveAll.retrieve(req, res)})
 app.get('/feeds/images/:filename', function (req, res) {  feed_images_retrieve.retrieve(req, res);})
 app.post('/feeds/images/delete', function (req, res) {  feed_images_delete.remove(req, res);});

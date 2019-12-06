@@ -42,7 +42,12 @@ let create_account = (req,res) => {
             message: "Registration not successfull."
           });
         } else {
-          res.send(results[0])
+          console.log(results[0].id)
+          connection.query("INSERT INTO `accounts_informations` (`account_id`, `created_at`) VALUES('" + results[0].id + "', '" + created_at + "')", function(error, result, fields) {
+            connection.query("INSERT INTO `accounts_profiles` (`account_id`, `created_at`) VALUES('" + results[0].id + "', '" + created_at + "')", function(error, result, fields) {
+              res.send(results[0])
+            })
+          })
         }
       });
     }

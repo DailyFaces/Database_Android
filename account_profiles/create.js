@@ -5,10 +5,9 @@ const create = (req, res) => {
     var sql = "INSERT INTO `accounts_profiles`(`account_id`,`url`,`created_at`, `updated_at`) VALUES ('"+req.body.account_id+"','" + url + "','" + new Date().toISOString() + "','" + new Date().toISOString() + "')";
     connection.query(sql, function (err, rows) {
         if (err) {
-            res.send(err)
+            console.log(err)
         } else {
             console.log(rows)
-            res.send(rows);
         }
     })
 }

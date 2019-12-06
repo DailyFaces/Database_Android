@@ -1,10 +1,11 @@
 const connection = require('../system/db_connection')
 const created_at = new Date().toISOString()
+const updated_at = created_at
 let Response = require("../helpers/response");
 let response = new Response(); //response object
 let feeds_create = (req, res) => {
-    let createStmt = "INSERT INTO `feeds` (`account_id`,`details`,`type`,`created_at`) VALUES('" + req.body.id + "','" + req.body.details + "','" + req.body.type + "','" +
-        created_at + "')"
+    let createStmt = "INSERT INTO `feeds` (`account_id`,`details`,`type`,`created_at`,`updated_at`) VALUES('" + req.body.account_id + "','" + req.body.details + "','" + req.body.type + "','" +
+        created_at + "', '" + updated_at + "')"
         console.log(req.body)
     connection.query(createStmt, function (error, results, fields) {
         if (error) {

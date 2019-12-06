@@ -22,10 +22,11 @@ let create = (req, res) => {
     account_id +  "','" + first_name + "','" + middle_name + "','" + last_name + "','" + age + "','" + birth_date + "','" + gender +"','" + contact_number + "','" + created_at + "','"+updated_at+ "')";
   connection.query(stmt, function (error, results, fields) {
     if (error) {
-      res.status(401).json({
-        error : error,
-        data : null
-      });
+      console.log(error)
+      // res.status(401).json({
+      //   error : error,
+      //   data : null
+      // });
       return;
     }
     if (results[0] == undefined) {
@@ -38,7 +39,7 @@ let create = (req, res) => {
             return;
         }
         if (results2[0] == undefined) {
-          connection.query("SELECT * FROM `accounts`, `accounts_informations` WHERE accounts.id = accounts_informations.account_id and `account_id`='" + account_id + "'", function (error, results, fields) {
+          connection.query("SELECT * FROM `accounts`, `accounts_informations` WHERE accounts.id = accounts_informations.account_id and `account_id`='" + account_id + "' and `deleted_at` = NULL", function (error, results, fields) {
             if (error) {
               res.status(401).json({
                 error : error,
