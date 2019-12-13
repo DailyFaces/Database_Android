@@ -1,9 +1,15 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 const PORT = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const fs = require('fs')
+
+app.use(cors())
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
+app.use(bodyParser.json({ limit: "50mb" }))
+
 
 //importing Account CRUD
 const account_create = require('./account_CRUD/create')
@@ -41,7 +47,14 @@ app.post('/ms-groups/create/:id', (req, res) => {
 })
 
 app.post('/ms-groups/retrieve-all', (req, res) => {
-  ms_group_crud.retrieve.all_retrieve_ms_group(req, res);
+  console.log(req.body);
+  ms_group_crud.retrieve.retrieve_ms_group(req, res);
+})
+
+//testing
+app.post('/ms-groups/retrieve-alls', (req, res) => {
+  console.log(req.body);
+  ms_group_crud.retrieve.retrieve_ms_groups(req, res);
 })
 
 app.post('/ms-groups/retrieve/active', (req, res) => {
@@ -84,7 +97,6 @@ const ms_messages_crud = require('./ms_messages_CRUD/ms_messages_crud');
 
 app.post('/ms-messages/create/:id', (req, res) => {
   console.log(req.body);
-
   ms_messages_crud.create.create_ms_message(req, res);
 })
 
@@ -181,8 +193,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }))
-app.use(bodyParser.json({ limit: "50mb" }))
+
 
 //routes for accounts
 app.post('/auth/user', checkToken, function (req, res) {  account_auth_user.auth_user(req, res);})
