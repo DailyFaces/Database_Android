@@ -1,34 +1,23 @@
+const connection =require('../system/db_connection')
 const jwt = require("jsonwebtoken");
 const config = require('../config');
 
 let auth_user = (req, res) => {
-    let token = req.headers.token
-    if (token.startsWith('Bearer ')) {
-        // Remove Bearer from string
-        token = token.slice(7, token.length);
-    }
-    if (token) {
-        jwt.verify(token, config.secret, (err, decoded) => {
-            if (err) {
-                return res.json({
-                    success: false,
-                    message: 'Token is not valid'
-                });
-            } else {
-                req.decoded = decoded;
-                res.status(200).json({
-                    message: "Auth token is valid",
-                    decoded: decoded
-                });
-                next();
-            }
-        });
+	jwt.verify(req.token, config.secret, (err, authorizedData) => {
+    if(err){
+        //If error send Forbidden (403)
+        console.log('ERROR: Could not connect to the protected route');
+        res.sendStatus(403);
     } else {
-        return res.json({
-            success: false,
-            message: 'Auth token is not supplied'
+        //If token is successfully verified, we can send the autorized data 
+        res.json({
+            message: 'Successful log in',
+            error : null,
+            authorizedData
         });
+        console.log('SUCCESS: Connected to protected route');
     }
+})
 }
 
-module.exports = { auth_user }
+module.exports = {auth_user}
